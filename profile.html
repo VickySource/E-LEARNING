@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>User Profile</h2>
+        <div id="userProfile" class="p-3 border rounded bg-light"></div>
+    </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        const profileContainer = document.getElementById('userProfile');
+
+        if (user) {
+            profileContainer.innerHTML = `
+                <p><strong>Username:</strong> ${user.username}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <a class="btn btn-primary" href="index.html">Go Home</a>
+            `;
+        } else {
+            profileContainer.innerHTML = `<p>You are not logged in.</p><a href="login.html">Login</a>`;
+        }
+    </script>
+</body>
+</html>
