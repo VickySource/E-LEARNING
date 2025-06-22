@@ -5,7 +5,6 @@
 ![instructor Site](instructor.png)
 
 
-
 Welcome to ****,E-Learning Website an E-learning platform crafted to deliver a seamless and interactive learning experience. Built with **HTML5**, **CSS3**, **Bootstrap 5**, and **JavaScript**, this project is designed to be both user-friendly and responsive.
 
 ## 🌟 Features
