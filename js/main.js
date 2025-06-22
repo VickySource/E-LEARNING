@@ -94,6 +94,30 @@
     });
 
 })(jQuery);
+document.addEventListener("DOMContentLoaded", function () {
+    const userData = JSON.parse(localStorage.getItem('loggedInUser'));
+    const loginLink = document.getElementById("login-link");
+    const userDisplay = document.getElementById("user-name-display");
+
+    if (userData && userData.username) {
+        // Hide login icon and show user name with logout
+        if (loginLink) loginLink.style.display = "none";
+        if (userDisplay) {
+            userDisplay.innerHTML = `
+                <span class="nav-item nav-link">Hi, ${userData.username}</span>
+                <a href="#" class="nav-item nav-link" id="logoutBtn">Logout</a>
+            `;
+        }
+
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", function () {
+                localStorage.removeItem("loggedInUser");
+                window.location.href = "index.html";
+            });
+        }
+    }
+});
 
 // ✅ Contact form safe handler
 const contactForm = document.querySelector('.contact-form');
