@@ -133,18 +133,5 @@ document.querySelector('.contact-form').addEventListener('submit', function (eve
       console.error('Error:', error);
       alert("Your message has been sent successfully. We'll respond shortly!");
     });
-    // Show username if logged in
-const storedUser = JSON.parse(localStorage.getItem("user"));
-const isLoggedIn = localStorage.getItem("loggedIn") === "true";
-const profileIcon = document.querySelector(".fa-user");
-
-if (isLoggedIn && storedUser && profileIcon) {
-    const nameSpan = document.createElement("span");
-    nameSpan.textContent = " " + storedUser.username;
-    nameSpan.style.fontWeight = "bold";
-    nameSpan.style.marginLeft = "5px";
-    nameSpan.style.color = "#fb873f";
-    profileIcon.parentElement.appendChild(nameSpan);
-}
-  });
+   });
   
