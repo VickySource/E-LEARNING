@@ -1,13 +1,25 @@
 # 📚 E-Learning Website
 
-
-
 ![E-Learning Website](image.png)
 ![Developer Site](devloper.png)
 ![Instructor Site](instructor.png)
 
+
+
 Welcome to **E-Learning Website**, an interactive and user-friendly platform to enhance your online learning experience. Developed using **HTML5**, **CSS3**, **Bootstrap 5**, and **JavaScript**, this frontend-only solution supports responsive design and basic user authentication via `localStorage`.
 
+
+🙋 Contributor Info
+
+Name: VICKY S
+
+GitHub: [@VickySource](https://github.com/VickySource)
+
+LinkedIn: [Vicky S](https://www.linkedin.com/in/vicky-s1/)
+
+Twitter/X: [@vikkitwits](https://x.com/vikkitwits)
+
+🌐 Website: Visit My E-Learning Website here 👉 (https://vickysource.github.io/E-learning/)
 ---
 
 ## 🌟 Features
@@ -67,18 +79,8 @@ Found a bug? Want to request a feature? You’re most welcome!
 📧 Email: vvicky25@gmail.com
 
 💬 GitHub Discussions : https://github.com/VickySource/E-learning/discussions/
- lin
 
 ---
-🙋 Contributor Info
-
-Name: VICKY S
-
-GitHub: [@VickySource](https://github.com/VickySource)
-
-LinkedIn: [Dhanush A R](https://www.linkedin.com/in/vicky-s1/)
-
-Twitter/X: [@VickySource](https://x.com/vikkitwits)
 
 
 📌 Future Enhancements
