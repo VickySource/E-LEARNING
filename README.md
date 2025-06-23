@@ -25,7 +25,7 @@ Welcome to **E-Learning Website**, an interactive and user-friendly platform to 
 ### 🔧 Prerequisites
 
 - A modern web browser (Chrome, Firefox, Safari)
-- A code editor (VS Code, Sublime Text)
+- A code editor (VS Code)
 
 ### 🛠️ Installation
 
@@ -34,7 +34,7 @@ Welcome to **E-Learning Website**, an interactive and user-friendly platform to 
    git clone https://github.com/VickySource/E-learning.git
 2. Navigate to Project Folder:
 
-cd E-learning
+   cd E-learning
 
 3. Launch the Website:
 
@@ -62,7 +62,7 @@ Found a bug? Want to request a feature? You’re most welcome!
 
 📩 Get In Touch
 
-📧 Email: elearn.collab@gmail.com
+📧 Email: vvicky25@gmail.com
 
 💬 GitHub Discussions: Click Here
 
