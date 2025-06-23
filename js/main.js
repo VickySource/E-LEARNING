@@ -94,179 +94,212 @@
     });
 
 })(jQuery);
-document.addEventListener("DOMContentLoaded", function () {
-    const userData = JSON.parse(localStorage.getItem('loggedInUser'));
-    const loginLink = document.getElementById("login-link");
-    const userDisplay = document.getElementById("user-name-display");
 
-    if (userData && userData.username) {
-        // Hide login icon and show user name with logout
-        if (loginLink) loginLink.style.display = "none";
-        if (userDisplay) {
-            userDisplay.innerHTML = `
-                <span class="nav-item nav-link">Hi, ${userData.username}</span>
-                <a href="#" class="nav-item nav-link" id="logoutBtn">Logout</a>
-            `;
-        }
+console.log("Auth.js loaded successfully");
 
-        const logoutBtn = document.getElementById("logoutBtn");
-        if (logoutBtn) {
-            logoutBtn.addEventListener("click", function () {
-                localStorage.removeItem("loggedInUser");
-                window.location.href = "index.html";
-            });
-        }
-    }
-});
-
-//  Contact form safe handler
-const contactForm = document.querySelector('.contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-
-        fetch(form.action, {
-            method: form.method,
-            body: formData
-        })
-        .then(response => {
-            if (response.ok) {
-                alert("Your message has been sent successfully. We'll respond shortly!");
-                form.reset();
-            } else {
-                return response.text().then(text => { throw new Error(text); });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("There was a problem sending your message.");
-        });
-    });
+// Initialize users array in localStorage if not present
+if (!localStorage.getItem('users')) {
+    localStorage.setItem('users', JSON.stringify([]));
+    console.log("Users array initialized in localStorage");
 }
 
-// ✅ Signup form handler
-const signupForm = document.getElementById('registerForm');
-if (signupForm) {
-    signupForm.addEventListener('submit', function (e) {
+// Get users from localStorage
+function getUsers() {
+    const users = JSON.parse(localStorage.getItem('users'));
+    console.log("Retrieved users from localStorage:", users);
+    return users;
+}
+
+// Save a new user
+function saveUser(user) {
+    const users = getUsers();
+    users.push(user);
+    localStorage.setItem('users', JSON.stringify(users));
+    console.log("User saved to localStorage:", user);
+}
+
+// Find a user by email
+function findUserByEmail(email) {
+    const users = getUsers();
+    const user = users.find(user => user.email === email);
+    console.log("Finding user by email", email, ":", user);
+    return user;
+}
+
+// ==== Registration Form Validation ====
+const registerForm = document.getElementById('registerForm');
+if (registerForm) {
+    console.log("Register form found, adding event listener");
+    registerForm.addEventListener('submit', function (e) {
         e.preventDefault();
+        console.log("Register form submitted");
+
         const username = document.getElementById('registerUsername').value.trim();
         const email = document.getElementById('registerEmail').value.trim();
         const password = document.getElementById('registerPassword').value;
-        const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9]).{6,}$/;
-        if (!passwordRegex.test(password)) {
-            alert("Password must contain at least 1 capital letter, 1 special character, and 1 number.");
-            return;
+
+        console.log("Registration data:", { username, email, password: "***" });
+
+        let isValid = true;
+
+        // Validations
+        if (!username) {
+            alert('Username is required');
+            isValid = false;
         }
-        localStorage.setItem('user', JSON.stringify({ username, email, password }));
-        localStorage.setItem('isLoggedIn', 'true');
-        window.location.href = 'courses.html';
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert('Please enter a valid email');
+            isValid = false;
+        } else if (findUserByEmail(email)) {
+            alert('Email already registered');
+            isValid = false;
+        }
+
+        if (!password || password.length < 6) {
+            alert('Password must be at least 6 characters');
+            isValid = false;
+        }
+
+        if (isValid) {
+            const user = {
+                id: Date.now().toString(),
+                username: username,
+                email: email,
+                password: password,
+                createdAt: new Date().toISOString()
+            };
+
+            saveUser(user);
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
+            localStorage.setItem('isLoggedIn', 'true');
+            console.log("User registered and logged in:", user);
+            
+            alert('Registration successful! Redirecting to profile...');
+            window.location.href = 'profile.html';
+        }
     });
 }
 
-// ✅ Login form handler
+// ==== Login Form Validation ====
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
+    console.log("Login form found, adding event listener");
     loginForm.addEventListener('submit', function (e) {
         e.preventDefault();
+        console.log("Login form submitted");
+
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user && user.email === email && user.password === password) {
-            alert('Login successful!');
+
+        console.log("Login attempt:", { email, password: "***" });
+
+        let isValid = true;
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert('Please enter a valid email');
+            isValid = false;
+        }
+
+        if (!password) {
+            alert('Password is required');
+            isValid = false;
+        }
+
+        if (isValid) {
+            const user = findUserByEmail(email);
+
+            if (!user) {
+                alert('Email not registered. Please sign up first.');
+                return;
+            }
+
+            if (user.password !== password) {
+                alert('Incorrect password');
+                return;
+            }
+
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
             localStorage.setItem('isLoggedIn', 'true');
-            window.location.href = 'courses.html';
-        } else {
-            alert('Invalid email or password!');
+            console.log("User logged in successfully:", user);
+            
+            alert('Login successful! Redirecting to profile...');
+            window.location.href = 'profile.html';
         }
     });
 }
 
-// ✅ Logout button and navbar visibility
-document.addEventListener('DOMContentLoaded', function () {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    const logoutBtn = document.getElementById('logoutBtn');
-    const loginLink = document.getElementById('loginLink');
-
-    if (isLoggedIn) {
-        if (logoutBtn) logoutBtn.style.display = 'inline-block';
+// ==== Check Authentication Status ====
+function checkAuthStatus() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    
+    console.log("Checking auth status:", { isLoggedIn, loggedInUser });
+    
+    const loginLink = document.getElementById('login-link');
+    const userDisplay = document.getElementById('user-name-display');
+    
+    if (isLoggedIn === 'true' && loggedInUser && loggedInUser.username) {
+        console.log("User is logged in, updating navbar");
+        // User is logged in - show username and logout
         if (loginLink) loginLink.style.display = 'none';
-    }
-
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('isLoggedIn');
-            window.location.href = 'index.html';
-        });
-    }
-});
-
-// Signup logic
-document.addEventListener("DOMContentLoaded", () => {
-    const signupForm = document.getElementById("signup-form");
-    if (signupForm) {
-        signupForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const username = document.getElementById("signup-username").value;
-            const password = document.getElementById("signup-password").value;
-            if (username && password) {
-                localStorage.setItem("user", JSON.stringify({ username, password }));
-                alert("Signup successful!");
-                window.location.href = "login.html";
+        if (userDisplay) {
+            userDisplay.innerHTML = `
+                <span class="nav-item nav-link text-primary">Hi, ${loggedInUser.username}</span>
+                <a href="#" class="nav-item nav-link" id="logoutBtn">Logout</a>
+            `;
+            
+            // Add logout functionality
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    logout();
+                });
             }
-        });
-    }
-
-    // Login logic
-    const loginForm = document.getElementById("login-form");
-    if (loginForm) {
-        loginForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const username = document.getElementById("login-username").value;
-            const password = document.getElementById("login-password").value;
-            const user = JSON.parse(localStorage.getItem("user"));
-            if (user && user.username === username && user.password === password) {
-                localStorage.setItem("loggedInUser", username);
-                alert("Login successful!");
-                window.location.href = "profile.html";
-            } else {
-                alert("Invalid credentials!");
-            }
-        });
-    }
-
-    // Profile logic
-    const usernameDisplay = document.getElementById("username-display");
-    if (usernameDisplay) {
-        const loggedInUser = localStorage.getItem("loggedInUser");
-        if (loggedInUser) {
-            usernameDisplay.textContent = loggedInUser;
-        } else {
-            window.location.href = "login.html"; // redirect to login if not logged in
         }
-    }
-});
-
-
-// YouTube Modal Logic
-document.addEventListener("DOMContentLoaded", () => {
-    const videoButtons = document.querySelectorAll(".open-video");
-    const youtubeFrame = document.getElementById("youtubeFrame");
-
-    videoButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            const videoUrl = button.getAttribute("data-video-url");
-            if (youtubeFrame) {
-                youtubeFrame.src = videoUrl;
-            }
-        });
-    });
-});
-
-function stopVideo() {
-    const youtubeFrame = document.getElementById("youtubeFrame");
-    if (youtubeFrame) {
-        youtubeFrame.src = "";
+    } else {
+        console.log("User is not logged in, showing login link");
+        // User is not logged in - show login link
+        if (loginLink) loginLink.style.display = 'block';
+        if (userDisplay) userDisplay.innerHTML = '';
     }
 }
+
+// ==== Logout Function ====
+function logout() {
+    console.log("Logging out user");
+    localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('isLoggedIn');
+    alert('You have been logged out.');
+    window.location.href = 'index.html';
+}
+
+// ==== Check if user should access protected pages ====
+function checkProtectedPages() {
+    const currentPage = window.location.pathname;
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    
+    console.log("Checking protected pages:", { currentPage, isLoggedIn });
+    
+    // List of pages that require authentication
+    const protectedPages = ['/profile.html', 'profile.html'];
+    
+    const isProtectedPage = protectedPages.some(page => currentPage.includes(page));
+    
+    if (isProtectedPage && isLoggedIn !== 'true') {
+        console.log("Redirecting to login - protected page accessed without auth");
+        alert('Please log in to access this page.');
+        window.location.href = 'login.html';
+        return false;
+    }
+    
+    return true;
+}
+
+// ==== Initialize on page load ====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM loaded, initializing auth system");
+    checkProtectedPages();
+    checkAuthStatus();
+});
