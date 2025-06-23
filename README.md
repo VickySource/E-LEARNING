@@ -1,5 +1,7 @@
 # 📚 E-Learning Website
 
+
+
 ![E-Learning Website](image.png)
 ![Developer Site](devloper.png)
 ![Instructor Site](instructor.png)
@@ -64,13 +66,20 @@ Found a bug? Want to request a feature? You’re most welcome!
 
 📧 Email: vvicky25@gmail.com
 
-💬 GitHub Discussions: Click Here
-
-🧑‍💻 Pull Requests: Submit Here
-
-
+💬 GitHub Discussions : https://github.com/VickySource/E-learning/discussions/
+ lin
 
 ---
+🙋 Contributor Info
+
+Name: VICKY S
+
+GitHub: [@VickySource](https://github.com/VickySource)
+
+LinkedIn: [Dhanush A R](https://www.linkedin.com/in/vicky-s1/)
+
+Twitter/X: [@VickySource](https://x.com/vikkitwits)
+
 
 📌 Future Enhancements
 
