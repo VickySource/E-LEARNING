@@ -247,7 +247,9 @@ function checkAuthStatus() {
             userDisplay.innerHTML = `
                 <span class="nav-item nav-link text-primary">Hi, ${loggedInUser.username}</span>
                 <a href="#" class="nav-item nav-link" id="logoutBtn">Logout</a>
+                <a href="profile.html" class="nav-item nav-link">My Profile</a>
             `;
+            
             
             // Add logout functionality
             const logoutBtn = document.getElementById('logoutBtn');
